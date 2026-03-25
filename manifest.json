@@ -1,0 +1,30 @@
+{
+  "manifest_version": 2,
+  "name": "ogre",
+  "version": "1.0",
+
+  "description": "Makes life more peaceful on the internet by removing shorts, recommendations and rerouting the default YouTube page from Home to Subscriptions",
+
+  "icons": {
+    "48": "icons/OgreIcon.png"
+  },
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "jamesboogaard66@gmail.com",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  },
+
+  "content_scripts": [
+    {
+      "matches": [
+      "https://www.youtube.com/*",
+      "https://youtube.com/*"
+    ],
+      "js": ["ogre.js"]
+    }
+  ]
+}
