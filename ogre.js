@@ -1,4 +1,3 @@
-
 function remove_shorts() {
   document.querySelectorAll([
     "ytm-shorts-lockup-view-model",
@@ -10,30 +9,37 @@ function remove_shorts() {
 }
 
 function remove_home_and_shorts_options() {
-  document.querySelectorAll("ytd-guide-section-renderer, ytd-mini-guide-entry-renderer")
-    .forEach(element => {
-      const text = element.textContent;
-      const ariaLabel = element.getAttribute("aria-label") 
-                     || element.querySelector("[aria-label]")?.getAttribute("aria-label");
-      
-      if (text.includes("Home") || text.includes("Shorts") || ariaLabel === "Home" || ariaLabel === "Shorts") {
-        element.remove();
-      }
+  document.querySelectorAll("ytd-guide-entry-renderer, ytd-mini-guide-entry-renderer")
+    .forEach(el => {
+      const label = el.querySelector("yt-formatted-string, .title")?.textContent?.trim();
+      if (label === "Home" || label === "Shorts") el.remove();
     });
 }
 
-function start_at_subscriptions(){
+let redirected = false;
+function start_at_subscriptions() {
+  if (redirected) return;
+  redirected = true;
   window.location.replace("https://www.youtube.com/feed/subscriptions");
 }
 
 function remove_recommendations(){
     document.querySelectorAll("ytd-watch-flexy"
     ).forEach(element => {
-        const rec = element.querySelector("#secondary")
-        if(rec){
-            rec.remove()
-        }
+        const rec = element.querySelector("#secondary");
+        const related = element.querySelector("#related");
+        if (rec) rec.remove();
+        if (related) related.remove();
     })
+}
+
+function remove_end_suggestions() {
+  document.querySelectorAll([
+    ".ytp-suggestion-set",         
+    ".ytp-fullscreen-grid",        
+    ".ytp-ce-element",             
+    "ytd-endscreen-renderer",      
+  ].join(",")).forEach(el => el.remove());
 }
 
 function main(){
@@ -45,6 +51,7 @@ function main(){
       remove_home_and_shorts_options();
     }else if(current_window.startsWith("/watch")){
       remove_recommendations();
+      remove_end_suggestions();
     }
 }
 
